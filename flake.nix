@@ -252,6 +252,7 @@
           "codex"
           "chatgpt"
           "t3-code"
+          "claude"
 
           #-- Social Media--
           "telegram"
