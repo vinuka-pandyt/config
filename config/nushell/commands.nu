@@ -340,3 +340,13 @@ def notify [
   let secret = (op read "op://Development/3ehhu3n4cwknvnbyjgfxynji5m/password")
   curl -s -o /dev/null -d ($message) $"ntfy.sh/($secret)"
 }
+
+# run Claude Code through the local CLIProxyAPI (127.0.0.1:8317); args pass through to claude.
+# No auth token is set, so the claude.ai login (and its connectors) stays active; the proxy
+# ignores that login's bearer only while access.api-keys is empty in the cliproxyapi config.
+# Tool search is off for non-Anthropic base URLs, which would inline every MCP tool schema.
+def --wrapped claude-proxy [...args] {
+  with-env { ANTHROPIC_BASE_URL: "http://127.0.0.1:8317", ENABLE_TOOL_SEARCH: "true" } {
+    ^claude ...$args
+  }
+}

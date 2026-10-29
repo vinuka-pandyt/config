@@ -139,7 +139,6 @@ $env.GOPATH = $env.XDG_DATA_HOME + '/go'
 $env.GNUPGHOME = $env.XDG_DATA_HOME + '/gnupg'
 $env.GPG_TTY = ^tty
 $env.ANDROID_HOME = $env.HOME + '/Library/Android/sdk'
-$env.ANDROID_NDK_HOME = "/opt/homebrew/share/android-ndk"
 
 $env.NIX_CONF_DIR = $env.HOME + '/.config/nix'
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
@@ -173,9 +172,8 @@ path add '/opt/homebrew/opt/openjdk/bin'
 path add '/nix/var/nix/profiles/default/bin'
 
 path add '~/projects/third-party/flutter/bin'
-path add $env.ANDROID_HOME
-path add $env.ANDROID_HOME + '/cmdline-tools/bin'
-path add $env.ANDROID_HOME + '/platform-tools'
+# home-manager's home.packages (includes the Android SDK tools)
+path add $'/etc/profiles/per-user/($env.USER)/bin'
 
 path add ($env.HOME | path join '.bun' 'bin')
 path add ($env.HOME | path join '.cache' '.bun' 'bin')
