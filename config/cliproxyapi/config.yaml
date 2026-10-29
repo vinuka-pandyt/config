@@ -1,0 +1,20 @@
+# CLIProxyAPI config, v8 layout. Full reference: config.example.yaml in router-for-me/CLIProxyAPI.
+# Run by the launchd agent in home.nix; edits are hot-reloaded.
+config-version: 8
+server:
+# Localhost only: with no access.api-keys below, any client that can reach the port is let in.
+  host: "127.0.0.1"
+  port: 8317
+management:
+  allow-remote: false
+# Empty disables the management API. A plaintext value is hashed and written back on startup.
+  secret-key: "$2a$10$ZaZ1wIc.jrjVIrC6jklvNOrRK0YZ.cY.F2Im1k6y4eexp6omyV0n."
+# Client keys. Leave empty for no client auth (safe only while server.host is 127.0.0.1).
+access:
+  api-keys: []
+# OAuth credentials from `cliproxyapi -config ~/.config/cliproxyapi/config.yaml -<provider>-login`.
+oauth:
+  auth-dir: "~/.cli-proxy-api"
+observability:
+  logs:
+    debug: false
