@@ -35,20 +35,27 @@
 throttle.global_down.max_rate.set_kb = 0
 throttle.global_up.max_rate.set_kb = 1
 
+# Paths are anchored to $HOME so rtorrent works from any cwd.
+method.insert = cfg.download, private|const|string, (cat,(system.env,HOME),"/Downloads/")
+method.insert = cfg.session,  private|const|string, (cat,(system.env,HOME),"/Documents/torrents/session/")
+method.insert = cfg.watch,    private|const|string, (cat,(system.env,HOME),"/Documents/torrents/watch/")
+
+# rtorrent won't create these itself; the session dir must exist to start.
+execute.throw = mkdir, -p, (cfg.download), (cfg.session), (cfg.watch)
+
 # Default directory to save the downloaded torrents.
 #
-directory.default.set = ./Downloads/
+directory.default.set = (cfg.download)
 
 # Default session directory. Make sure you don't run multiple instance
-# of rTorrent using the same session directory. Perhaps using a
-# relative path?
+# of rTorrent using the same session directory.
 #
-session.path.set = ./Documents/torrents/session/
+session.path.set = (cfg.session)
 
-# Watch a directory for new torrents, and stop those that have been
-# deleted.
+# Watch a directory for new torrents and start them.
+# (0.16 removed `schedule2`; `schedule` takes the command in ((...)).)
 #
-schedule2 = watch_directory,5,5,load.start=./Documents/torrents/watch/*.torrent
+schedule = watch_directory,5,5,((load.start,(cat,(cfg.watch),"*.torrent")))
 
 # Close torrents when disk-space is low.
 #

@@ -67,3 +67,7 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[url "git@github.com-pandyt:Edine-Services/"]
+	insteadOf = git@github.com:Edine-Services/
+	insteadOf = ssh://git@github.com/Edine-Services/
+	insteadOf = https://github.com/Edine-Services/
