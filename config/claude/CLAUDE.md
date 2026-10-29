@@ -49,3 +49,7 @@ In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the re
 
 If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is the user's decision.
 <!-- CODEGRAPH_END -->
+
+## Handling Jira tikckets
+
+I may sometimes give you tickets that are poorly written by bad software enginners, heck even somtimes the QA team. So don't treat that ticket as the ultimate guideline ask the questions that you need to ask about the ticket before assusming that the ticket is correct in describing what they need. Think that ticket in my thinking pattern and breakdown on what they are trying to say rather than assume that they know what they are talking about.
