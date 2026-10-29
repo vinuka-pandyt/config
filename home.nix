@@ -1,4 +1,19 @@
 { pkgs, config, ... }:
+let
+  # Android SDK with the emulator and an Apple Silicon Play Store image.
+  # It lives in the read-only Nix store: add packages here, not via sdkmanager.
+  # The SDK license is accepted via nixpkgs.config.android_sdk in flake.nix.
+  # API 35: the emulator's GuestAngle mode (needed on macOS for WebView/Chrome,
+  # see ~/.android/advancedFeatures.ini) is unstable on API > 35.
+  android = pkgs.androidenv.composeAndroidPackages {
+    platformVersions = [ "35" ];
+    includeEmulator = true;
+    includeSystemImages = true;
+    systemImageTypes = [ "google_apis_playstore" ];
+    abiVersions = [ "arm64-v8a" ];
+    includeCmake = false;
+  };
+in
 {
   home.username = "vinuka";
   home.homeDirectory = "/Users/vinuka";
@@ -31,6 +46,13 @@
     recursive = true;
   };
 
+  # Wrapped SDK tools (adb, emulator, sdkmanager, avdmanager, android, ...).
+  # cliproxyapi is also on PATH for the interactive `-<provider>-login` flows.
+  home.packages = [ android.androidsdk pkgs.cliproxyapi ];
+
+  # Stable SDK path for ANDROID_HOME (set in nushell/env.nu).
+  home.file."Library/Android/sdk".source = "${android.androidsdk}/libexec/android-sdk";
+
   home.file."Library/Services" = {
     source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix/config/services";
     recursive = true;
@@ -51,6 +73,29 @@
   home.file.".claude/skills" = {
     source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix/config/claude/skills";
     recursive = true;
+  };
+
+  # Only the file is linked: the app writes logs/ and static/ next to it,
+  # so ~/.config/cliproxyapi stays a real directory outside the repo.
+  xdg.configFile."cliproxyapi/config.yaml" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nix/config/cliproxyapi/config.yaml";
+  };
+
+  # CLIProxyAPI on 127.0.0.1:8317, run as a user agent so it can read ~/.cli-proxy-api.
+  launchd.agents.cliproxyapi = {
+    enable = true;
+    config = {
+      ProgramArguments = [
+        "${pkgs.cliproxyapi}/bin/cliproxyapi"
+        "-config"
+        "${config.xdg.configHome}/cliproxyapi/config.yaml"
+      ];
+      WorkingDirectory = "${config.xdg.configHome}/cliproxyapi";
+      RunAtLoad = true;
+      KeepAlive = true;
+      StandardOutPath = "/tmp/cliproxyapi.log";
+      StandardErrorPath = "/tmp/cliproxyapi.err.log";
+    };
   };
 
   xdg.configFile."carapace" = {

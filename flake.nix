@@ -9,6 +9,10 @@
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Locked separately so cliproxyapi can track the v8 Management API
+    # (needed by the management UI) without bumping the rest of the system.
+    nixpkgs-cliproxyapi.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
     nix-homebrew = {
       url = "github:zhaofengli/nix-homebrew";
       inputs.brew-src.follows = "homebrew-brew"; # This is the crucial line
@@ -116,6 +120,15 @@
       };
 
       nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.android_sdk.accept_license = true;
+
+      # Home Manager uses these pkgs (useGlobalPkgs), so home.nix gets this cliproxyapi too.
+      nixpkgs.overlays = [
+        (final: prev: {
+          cliproxyapi =
+            inputs.nixpkgs-cliproxyapi.legacyPackages.${prev.stdenv.hostPlatform.system}.cliproxyapi;
+        })
+      ];
 
       # Disable all documentation engines
       documentation.enable = false;
@@ -222,8 +235,6 @@
           "1password"
           "1password-cli"
           "orbstack"
-          "android-commandlinetools"
-          "android-platform-tools"
           "apidog"
           "ghostty"
           "tableplus"
@@ -239,6 +250,7 @@
           "codex"
           "claude-code"
           "tailscale"
+          "mactex-no-gui"
 
           #-- SDKs and Runtimes --
           "dotnet-sdk"

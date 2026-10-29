@@ -104,11 +104,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1789370590,
-        "narHash": "sha256-5rWeLwvjzvizqlnNSZ6T0R5nAAi0QwP7IGubxK6x3PQ=",
+        "lastModified": 1792092814,
+        "narHash": "sha256-gYzqFB+62NBJr4c5UZVIrsP3Ac3Tq54OGPAnl5mZMgU=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "34b85a9b640c0e49c9eb9fc68b4b456610efbb9b",
+        "rev": "f60c027d646a93b9c0d0aa048ca01857d6a3ddf0",
         "type": "github"
       },
       "original": {
@@ -206,6 +206,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-cliproxyapi": {
+      "locked": {
+        "lastModified": 1793225069,
+        "narHash": "sha256-sx1f99WGrDfJ83KKuQrqGPmot0rnDgmpLJDzpU2oHQQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e62746b0b472753ef019baceab6f1e2e52014980",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "oven-sh-bun-tap": {
       "flake": false,
       "locked": {
@@ -236,6 +252,7 @@
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-cliproxyapi": "nixpkgs-cliproxyapi",
         "oven-sh-bun-tap": "oven-sh-bun-tap"
       }
     }
